@@ -42,7 +42,7 @@ var getDb = function(host, done) {
 };
 
 var replSetGetConfig = function(db, done) {
-  db.admin().command({ replSetGetConfig: 1 }, {}, function (err, results) {
+  db.db(config.database).admin().command({ replSetGetConfig: 1 }, {}, function (err, results) {
     if (err) {
       return done(err);
     }
@@ -52,7 +52,7 @@ var replSetGetConfig = function(db, done) {
 };
 
 var replSetGetStatus = function(db, done) {
-  db.admin().command({ replSetGetStatus: {} }, {}, function (err, results) {
+  db.db(config.database).admin().command({ replSetGetStatus: {} }, {}, function (err, results) {
     if (err) {
       return done(err);
     }
@@ -64,7 +64,7 @@ var replSetGetStatus = function(db, done) {
 var initReplSet = function(db, hostIpAndPort, done) {
   console.log('initReplSet', hostIpAndPort);
 
-  db.admin().command({ replSetInitiate: {} }, {}, function (err) {
+  db.db(config.database).admin().command({ replSetInitiate: {} }, {}, function (err) {
     if (err) {
       return done(err);
     }
@@ -95,8 +95,7 @@ var replSetReconfig = function(db, rsConfig, force, done) {
   console.log('replSetReconfig', rsConfig);
 
   rsConfig.version++;
-
-  db.admin().command({ replSetReconfig: rsConfig, force: force }, {}, function (err) {
+  db.db(config.database).admin().command({ replSetReconfig: rsConfig, force: force }, {}, function (err) {
     if (err) {
       return done(err);
     }
